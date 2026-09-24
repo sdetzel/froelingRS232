@@ -1,0 +1,5 @@
+name: Fröling RS232 Modbus
+description: Home Assistant Modbus RTU setup for a Fröling Lambdatronic S3200 connected through a USB RS232 adapter.
+url: https://github.com/sdetzel/froelingRS232
+owner: sdetzel
+category: integration

@@ -1,0 +1,11 @@
+# Home Assistant local secrets
+secrets.yaml
+
+# Common editor/local files
+.DS_Store
+__pycache__/
+*.pyc
+
+# Local runtime files
+/tmp/
+tmp.txt

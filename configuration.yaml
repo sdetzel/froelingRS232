@@ -1,0 +1,70 @@
+# Fröling Lambdatronic S3200 via USB RS232 adapter.
+# Replace the port with the stable path of your adapter; see README.md.
+# Confirm the serial settings against your Fröling Modbus manual before use.
+
+modbus:
+  - name: froeling_s3200_serial
+    type: serial
+    port: /dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller_DSCDb2A5414-if00-port0
+    baudrate: 9600
+    bytesize: 8
+    method: rtu
+    parity: E
+    stopbits: 1
+    timeout: 5
+    message_wait_milliseconds: 30
+
+    # The register numbers in Fröling documentation are one-based and include
+    # the register family prefix. Home Assistant addresses are zero-based:
+    # 30001 -> input address 0, 40001 -> holding address 0.
+    sensors:
+      - name: Froeling boiler temperature
+        unique_id: froeling_boiler_temperature
+        slave: 2
+        address: 0
+        input_type: input
+        data_type: int16
+        scale: 0.1
+        precision: 1
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 30
+
+      - name: Froeling flue temperature
+        unique_id: froeling_flue_temperature
+        slave: 2
+        address: 1
+        input_type: input
+        data_type: int16
+        scale: 0.1
+        precision: 1
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 30
+
+      - name: Froeling residual oxygen
+        unique_id: froeling_residual_oxygen
+        slave: 2
+        address: 3
+        input_type: input
+        data_type: int16
+        scale: 0.1
+        precision: 1
+        unit_of_measurement: "%"
+        state_class: measurement
+        scan_interval: 30
+
+      - name: Froeling outdoor temperature
+        unique_id: froeling_outdoor_temperature
+        slave: 2
+        address: 1000
+        input_type: input
+        data_type: int16
+        scale: 0.1
+        precision: 1
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 30
