@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Fröling RS232",
+        "data": {
+          "port": "Serial port",
+          "baudrate": "Baud rate",
+          "slave": "Modbus slave ID"
+        }
+      }
+    }
+  }
+}
