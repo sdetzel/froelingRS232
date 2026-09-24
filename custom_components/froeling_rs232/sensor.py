@@ -70,7 +70,6 @@ class FroelingCoordinator(DataUpdateCoordinator):
             parity=self.config.get("parity", "E"),
             stopbits=self.config.get("stopbits", 1),
             timeout=self.config.get("timeout", 5),
-            method="rtu",
         )
 
         try:
