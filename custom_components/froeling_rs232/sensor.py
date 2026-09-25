@@ -65,9 +65,9 @@ class FroelingCoordinator(DataUpdateCoordinator):
 
         client = AsyncModbusSerialClient(
             port=port,
-            baudrate=self.config.get("baudrate", 9600),
+            baudrate=self.config.get("baudrate", 57600),
             bytesize=self.config.get("bytesize", 8),
-            parity=self.config.get("parity", "E"),
+            parity=self.config.get("parity", "N"),
             stopbits=self.config.get("stopbits", 1),
             timeout=self.config.get("timeout", 5),
         )

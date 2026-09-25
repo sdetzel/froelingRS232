@@ -6,7 +6,11 @@
         "data": {
           "port": "Serial port",
           "baudrate": "Baud rate",
-          "slave": "Modbus slave ID"
+          "slave": "Modbus slave ID",
+          "parity": "Parity",
+          "bytesize": "Data bits",
+          "stopbits": "Stop bits",
+          "timeout": "Timeout (seconds)"
         }
       }
     }

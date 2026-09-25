@@ -7,6 +7,7 @@ from homeassistant.core import HomeAssistant
 
 DOMAIN = "froeling_rs232"
 
+
 class FroelingRs232ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
@@ -22,8 +23,12 @@ class FroelingRs232ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required("port", default="/dev/serial/by-id/REPLACE_WITH_YOUR_USB_RS232_ADAPTER"): str,
-                    vol.Required("baudrate", default=9600): int,
+                    vol.Required("baudrate", default=57600): int,
                     vol.Required("slave", default=2): int,
+                    vol.Required("parity", default="N"): vol.In(["N", "E", "O"]),
+                    vol.Required("bytesize", default=8): vol.In([7, 8]),
+                    vol.Required("stopbits", default=1): vol.In([1, 2]),
+                    vol.Required("timeout", default=5): vol.All(vol.Coerce(int), vol.Range(min=1, max=30)),
                 }
             ),
         )
