@@ -76,12 +76,12 @@ class FroelingCoordinator(DataUpdateCoordinator):
             await client.connect()
             values: dict[str, float] = {}
             slave = self.config.get("slave", 2)
-            client.slave = slave
 
             for sensor_def in SENSOR_DEFINITIONS:
                 result = await client.read_input_registers(
                     address=sensor_def["address"],
                     count=1,
+                    device_id=slave,
                 )
                 if result.isError():
                     raise UpdateFailed(
