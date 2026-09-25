@@ -36,7 +36,7 @@ async def async_setup_entry(
                 sensor_def["key"],
                 sensor_def["name"],
                 sensor_def["address"],
-                sensor_def.get("scale", 1),
+                sensor_def.get("divisor", 1),
                 sensor_def.get("unit", ""),
                 sensor_def.get("device_class"),
             )
@@ -87,7 +87,9 @@ class FroelingCoordinator(DataUpdateCoordinator):
                     raise UpdateFailed(
                         f"Modbus read error for {sensor_def['name']}: {result}")
                 raw_value = result.registers[0]
-                values[sensor_def["key"]] = raw_value * sensor_def.get("scale", 1)
+                if sensor_def.get("signed") and raw_value >= 0x8000:
+                    raw_value -= 0x10000
+                values[sensor_def["key"]] = raw_value / sensor_def.get("divisor", 1)
 
             return values
         except (ModbusException, OSError) as exc:
@@ -105,7 +107,7 @@ class FroelingSensor(SensorEntity):
         key: str,
         name: str,
         address: int,
-        scale: float,
+        divisor: float,
         unit: str,
         device_class: str | None,
     ) -> None:
@@ -116,7 +118,7 @@ class FroelingSensor(SensorEntity):
         self._attr_native_unit_of_measurement = unit
         self._attr_device_class = device_class
         self._address = address
-        self._scale = scale
+        self._divisor = divisor
 
     @property
     def available(self) -> bool:
@@ -130,7 +132,7 @@ class FroelingSensor(SensorEntity):
         value = self.coordinator.data.get(self._key)
         if value is None:
             return None
-        return value / self._scale if self._scale != 1 else value
+        return value
 
     @property
     def should_poll(self) -> bool:
