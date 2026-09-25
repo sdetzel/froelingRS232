@@ -9,7 +9,7 @@ modbus:
     baudrate: 57600
     bytesize: 8
     method: rtu
-    parity: E
+    parity: N
     stopbits: 1
     timeout: 5
     message_wait_milliseconds: 30
