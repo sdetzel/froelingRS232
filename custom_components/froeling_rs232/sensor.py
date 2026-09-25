@@ -12,7 +12,11 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+    DataUpdateCoordinator,
+    UpdateFailed,
+)
 
 from .const import DOMAIN, SENSOR_DEFINITIONS
 
@@ -98,7 +102,7 @@ class FroelingCoordinator(DataUpdateCoordinator):
             client.close()
 
 
-class FroelingSensor(SensorEntity):
+class FroelingSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Fröling Modbus sensor."""
 
     def __init__(
@@ -111,7 +115,7 @@ class FroelingSensor(SensorEntity):
         unit: str,
         device_class: str | None,
     ) -> None:
-        self.coordinator = coordinator
+        super().__init__(coordinator)
         self._key = key
         self._attr_name = name
         self._attr_unique_id = f"froeling_rs232_{key}"
@@ -119,10 +123,6 @@ class FroelingSensor(SensorEntity):
         self._attr_device_class = device_class
         self._address = address
         self._divisor = divisor
-
-    @property
-    def available(self) -> bool:
-        return self.coordinator.last_update_success
 
     @property
     def native_value(self):
@@ -133,11 +133,3 @@ class FroelingSensor(SensorEntity):
         if value is None:
             return None
         return value
-
-    @property
-    def should_poll(self) -> bool:
-        return False
-
-    async def async_update(self) -> None:
-        """Update the sensor state from the coordinator."""
-        await self.coordinator.async_request_refresh()
